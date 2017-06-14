@@ -1,0 +1,4 @@
+*.pyc
+scripts/test.csv
+scripts/train.csv
+.spyproject/

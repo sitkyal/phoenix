@@ -1,0 +1,275 @@
+# Base 
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 10:41:41 2017
+
+@author: ADASNURK
+"""
+
+# import libraries and preprocess
+
+def base_found():
+    import pandas as pd
+    import numpy as np
+     
+    # import data files
+    df = pd.read_csv('titanic_train.csv')
+    df_test = pd.read_csv('titanic_test.csv')
+    combine = [df, df_test]
+    
+    # Encode for Sex and Embarked 
+    
+    for col in combine:
+        col.Sex.replace('male', 0, inplace=True)
+        col.Sex.replace('female', 1, inplace=True)
+        
+    # Feature Engineering
+    
+    # Travelling with family may include your chances of survival. 
+    
+    for col in combine:
+        col['IsAlone'] = 0
+        col['Family'] = col['Parch'] + col['SibSp'] + 1
+        col.loc[col['Family'] == 1, 'IsAlone'] = 1
+    
+    # Age and Embarked have null values and will need to be replaced
+    
+    #df.Age.replace(np.NaN, df.Age.mean(), inplace=True)
+    for col in combine:
+        col.Embarked.replace(np.NaN, 'S', inplace=True)
+        col.Fare.replace(np.NaN, col.Fare.median(), inplace=True)
+        
+    # Encode for Sex and Embarked on Test
+    
+    for col in combine:
+        col.Embarked.replace('C', 1, inplace=True)
+        col.Embarked.replace('Q', 2, inplace=True)
+        col.Embarked.replace('S', 3, inplace=True)
+        col.Embarked = col.Embarked.astype(np.int)
+        
+    # Dropping Cabin due to too many Nulls and Tickets that don't have any specific value.
+    # Name may be interesting but not now. 
+    
+    for col in combine:
+        col.drop(['Ticket', 'Cabin'], axis=1, inplace=True)
+        
+    for col in combine:
+        col.Age.replace(np.NaN, col.Age.mean(), inplace=True)
+        
+    # Create Age Bands
+    
+    for col in combine:
+        col.loc[ col['Age'] <= 16, 'Age'] = 0
+        col.loc[(col['Age'] > 16) & (col['Age'] <= 32), 'Age'] = 1
+        col.loc[(col['Age'] > 32) & (col['Age'] <= 48), 'Age'] = 2
+        col.loc[(col['Age'] > 48) & (col['Age'] <= 64), 'Age'] = 3
+        col.loc[ col['Age'] > 64, 'Age']
+    
+    # So what's in the name? 
+    
+    for col in combine:
+        col['Title'] = col.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
+    
+        
+    # Replace all Titles with low frequencies as 'Rare'
+    
+    for col in combine:
+        col['Title'] = col['Title'].replace(['Dr', 'Rev','Col', 'Major', 'Countess', 'Lady', 'Jonkheer', 'Don', 'Capt', 'Sir', 'Dona'], 'Rare')
+        
+        col['Title'] = col['Title'].replace('Mlle', 'Miss')
+        col['Title'] = col['Title'].replace('Ms', 'Miss')
+        col['Title'] = col['Title'].replace('Mme', 'Mrs')
+        
+    # Encode
+    
+    for col in combine:
+        col.Title.replace('Mr', 1, inplace=True)
+        col.Title.replace('Mrs', 3, inplace=True)
+        col.Title.replace('Miss', 2, inplace=True)
+        col.Title.replace('Master', 4, inplace=True)
+        col.Title.replace('Rare', 5, inplace=True)
+        
+    for dataset in combine:
+        dataset.loc[ dataset['Fare'] <= 7.91, 'Fare'] = 0
+        dataset.loc[(dataset['Fare'] > 7.91) & (dataset['Fare'] <= 14.454), 'Fare'] = 1
+        dataset.loc[(dataset['Fare'] > 14.454) & (dataset['Fare'] <= 31), 'Fare']   = 2
+        dataset.loc[ dataset['Fare'] > 31, 'Fare'] = 3
+        dataset['Fare'] = dataset['Fare'].astype(int)
+    
+    for dataset in combine:
+        dataset['Age*Class'] = dataset.Age * dataset.Pclass
+    
+    columns = ['Pclass', 'Sex', 'Age', 'IsAlone','Fare', 'Title', 'Embarked', 'Age*Class']
+    
+    X = df[columns].as_matrix().astype(np.float)
+    X_test = df_test[columns].as_matrix().astype(np.float)
+    y = df['Survived'].as_matrix().astype(np.int)
+    return X, X_test, y
+
+# ds.py
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 11:32:25 2017
+
+@author: ADASNURK
+"""
+
+def decision_tree():
+    from base import base_found
+    from sklearn import tree
+    
+    X, X_test, y = base_found()
+
+    ds = tree.DecisionTreeClassifier()
+    ds.fit(X, y)
+    acc_ds = round(ds.score(X, y) * 100, 2)
+    acc_ds
+    print 'Decision Tree Classifier Accuracy: {}'.format(acc_ds)
+    return acc_ds
+
+decision_tree()
+
+
+# Ensemble Methods
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 11:35:35 2017
+
+@author: ADASNURK
+"""
+
+def ensemble_methods():
+    from base import base_found
+    from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
+    
+    X, X_test, y = base_found()
+
+    # Random Forest
+    rf = RandomForestClassifier(n_estimators=100)
+    rf.fit(X, y)
+    acc_rf = round(rf.score(X, y) * 100, 2)
+    acc_rf
+    print 'Random Forest Classifier Accuracy: {}'.format(acc_rf)
+    
+    # ADA Boost
+    
+    ab = AdaBoostClassifier()
+    ab.fit(X, y)
+    acc_ab = round(ab.score(X, y) * 100, 2)
+    acc_ab
+    print 'AdaBoost Classifier Accuracy: {}'.format(acc_ab)
+    
+    # Gradient Boosting
+    
+    gb = GradientBoostingClassifier(n_estimators=200)
+    gb.fit(X, y)
+    acc_gb = round(gb.score(X, y) * 100, 2)
+    acc_gb
+    print 'Gradient Boosting Classifier Accuracy: {}'.format(acc_gb)
+    
+    return acc_rf, acc_ab, acc_gb
+
+    # knn.py
+
+    # -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 11:23:02 2017
+
+@author: ADASNURK
+"""
+
+def knn():
+    from base import base_found
+    from sklearn import neighbors
+    
+    X, X_test, y = base_found()
+
+    knn = neighbors.KNeighborsClassifier(n_neighbors=5)
+    knn.fit(X, y)
+    acc_knn = round(knn.score(X, y) * 100, 2)
+    acc_knn
+    print 'KNN Accuracy: {}'.format(acc_knn)
+    return acc_knn
+
+# logreg.py
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 10:56:50 2017
+
+@author: ADASNURK
+"""
+
+def logreg():
+    from base import base_found
+    from sklearn import linear_model
+    
+    X, X_test, y = base_found()
+
+    logreg = linear_model.LogisticRegression()
+    logreg.fit(X, y)
+    acc_log = round(logreg.score(X, y) * 100, 2)
+    acc_log
+    print 'Logisitic Regression Accuracy: {}'.format(acc_log)
+    return acc_log
+
+# run_all.py
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 11:42:34 2017
+
+@author: ADASNURK
+"""
+
+def run_all():
+    import pandas as pd
+    from ds import decision_tree
+    from knn import knn
+    from logreg import logreg
+    from sv import sv
+    from ensemble_methods import ensemble_methods
+    
+    print('Running All')
+    acc_ds = decision_tree()
+    acc_knn = knn()
+    acc_log = logreg()
+    acc_svc = sv()
+    acc_rf, acc_ab, acc_gb = ensemble_methods()
+    
+    # Model Performance
+
+    models = pd.DataFrame({
+    'Model': ['Logistic Regression', 'KNN', 'Support Vector Machines', 'Gradient Boosting',
+              'Random Forest', 'Decision Tree', 'ADABoost'],
+    'Score': [acc_log, acc_knn,acc_svc, acc_gb, acc_rf, acc_ds, acc_ab ]})
+    models = models.sort_values(by='Score', ascending=True)
+    print models.sort_values(by='Score', ascending=False)
+
+run_all()
+
+
+# sv.py
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun 01 11:25:21 2017
+
+@author: ADASNURK
+"""
+
+def sv():
+    from base import base_found
+    from sklearn.svm import SVC
+    
+    X, X_test, y = base_found()
+
+    sv = SVC()
+    sv.fit(X, y)
+    acc_sv = round(sv.score(X, y) * 100, 2)
+    acc_sv
+    print 'Support Vector Machine Accuracy: {}'.format(acc_sv)
+    return acc_sv
