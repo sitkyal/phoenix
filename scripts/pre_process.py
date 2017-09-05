@@ -4,41 +4,64 @@
 import pandas as pd
 import sys
 from label_features import flabel_features
-from base_script_eda import fload_csv
 
 
 def fpre_process(fname):
     # Hot encoding for all categorical columns
     # Impute values for nulls in categorical and numerical columns
 
-    # 1. Get the selected labels and features
-    # 2. Determine the cat / numerical in features
-    # 3. Determine columns with Nulls
-    # 4. Determine most frequent in Cat
-    # 5. Impute cat column values with most frequent
-    # 6. Detemine mean / average for Num
-    # 7. Impute num column values with mean
-    # 8. Standardize
-    # 9. Return X and y
+    # 1. Get the selected labels and features - Done
+    # 2. Determine the cat / numerical in features - Done
+    # 3. Determine columns with Nulls - Done
+    # 4. Determine most frequent in Cat - Done
+    # 5. Impute cat column values with most frequent - Done
+    # 6. Detemine mean / average for Num - Done
+    # 7. Impute num column values with mean - Done
+    # 8. Hot Encode - Done
+    # 9. Standardize - TBD
+    # 10. Return X and y - To be Done 
 
-    # for testing
-    label = pd.Series(['Survived'])
-    features = pd.Series(['Pclass', 'Sex', 'Age'])
+    # for testing - Replace this code with extracting from label_features.py
+    label = ['Survived']
+    features = ['Pclass', 'Sex', 'Age', 'Embarked', 'Cabin']
 
-    selected_label, selected_features = flabel_features(label, features)
+    from base_script_eda import fload_csv
 
-    # get the df from the loaded file
     df, size = fload_csv(fname)
 
     # calculate the numerical and cat columns
 
-    cols = selected_features
-    num_cols = df._get_numeric_data().cols
+    cols = list(df[features].columns)
+    num_cols = list(df[features]._get_numeric_data().columns)
     cat_cols = list(set(cols) - set(num_cols))
-    return cols, num_cols, cat_cols
+
+    # Determine columns with Null values and Replace NAs
+
+    null_num_cols = df[num_cols].columns[df[num_cols].isnull().any()].tolist()
+    null_cat_cols = df[cat_cols].columns[df[cat_cols].isnull().any()].tolist()
+
+    # For numerical columns
+
+    for col in null_num_cols:
+        df[col].fillna(df[col].mean(), inplace=True)
+
+    # For categorical columns impute and hot encode
+
+    for col in null_cat_cols:
+
+        # impute missing values
+
+        df[col].fillna(df[col].value_counts().max(), inplace=True)
+
+    for col in null_cat_cols:
+        # Hot Encode
+
+        df = pd.concat([df, pd.get_dummies(df[col])], axis=1)
+
+    return df
 
 
 fname = sys.argv[1]
 print "sucessfull passing of " + fname
-cols, num_cols, cat_cols = fpre_process(fname)
-print cols, num_cols, cat_cols
+df = fpre_process(fname)
+print df.shape
