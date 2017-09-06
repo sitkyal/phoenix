@@ -4,20 +4,20 @@ import pandas as pd
 import sys
 
 
-def metric_k(metric, k):
+def fmetric_k(imetric, ik):
 
-    imetric = pd.Series(metric).values
-    ik = pd.Series(k).values
-    return imetric, ik
+    ometric = pd.Series(ometric).values
+    ok = pd.Series(ok).values
+    return ometric, ok
 
 
-metric = sys.argv[1]
-k = sys.argv[2:]
+imetric = sys.argv[1]
+ik = sys.argv[2:]
 
 # for testing
 #label = pd.Series(['Survived'])
 #features = pd.Series(['Pclass', 'Sex', 'Age'])
 
-imetric, ik = metric_k(metric, k)
-print imetric, ik
+ometric, ok = metric_k(imetric, ik)
+print ometric, ok
 sys.stdout.flush()

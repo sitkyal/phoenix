@@ -4,20 +4,20 @@ import pandas as pd
 import sys
 
 
-def flabel_features(label, features):
+def flabel_features(ilabel, ifeatures):
 
-    selected_label = pd.Series(label).values
-    selected_features = pd.Series(features).values
-    return selected_label, selected_features
+    olabel = pd.Series(ilabel).values
+    oeatures = pd.Series(ifeatures).values
+    return olabel, ofeatures
 
 
-#label = sys.argv[1]
-#features = sys.argv[2:]
+ilabel = sys.argv[1]
+ifeatures = sys.argv[2:]
 
 # for testing
 #label = pd.Series(['Survived'])
 #features = pd.Series(['Pclass', 'Sex', 'Age'])
 
-#selected_label, selected_features = flabel_features(label, features)
-#print selected_label, selected_features, type(selected_features)
-# sys.stdout.flush()
+olabel, ofeatures = flabel_features(ilabel, ifeatures)
+print olabel, ofeatures
+sys.stdout.flush()

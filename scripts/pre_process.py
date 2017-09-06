@@ -2,8 +2,8 @@
 
 
 import pandas as pd
+import numpy as np
 import sys
-from label_features import flabel_features
 
 
 def fpre_process(fname):
@@ -19,20 +19,22 @@ def fpre_process(fname):
     # 7. Impute num column values with mean - Done
     # 8. Hot Encode - Done
     # 9. Standardize - TBD
-    # 10. Return X and y - To be Done 
+    # 10. Return X and y - To be Done
+
+    # olabel, ofeatures = flabel_features(ilabel, ifeatures) # uncomment when testing is done
 
     # for testing - Replace this code with extracting from label_features.py
-    label = ['Survived']
-    features = ['Pclass', 'Sex', 'Age', 'Embarked', 'Cabin']
+    olabel = ['Survived']
+    ofeatures = ['Pclass', 'Sex', 'Age', 'Embarked', 'Cabin']
 
-    from base_script_eda import fload_csv
+    from load import fload_csv
 
     df, size = fload_csv(fname)
 
     # calculate the numerical and cat columns
 
-    cols = list(df[features].columns)
-    num_cols = list(df[features]._get_numeric_data().columns)
+    cols = list(df[ofeatures].columns)
+    num_cols = list(df[ofeatures]._get_numeric_data().columns)
     cat_cols = list(set(cols) - set(num_cols))
 
     # Determine columns with Null values and Replace NAs
@@ -53,15 +55,19 @@ def fpre_process(fname):
 
         df[col].fillna(df[col].value_counts().max(), inplace=True)
 
-    for col in null_cat_cols:
+    for col in cat_cols:
         # Hot Encode
 
         df = pd.concat([df, pd.get_dummies(df[col])], axis=1)
 
-    return df
+    # Extract X and y
+    y = df[olabel] #.as_matrix().astype(np.float)
+    X = df[ofeatures]# .as_matrix().astype(np.float)
+
+    return df, y, X
 
 
 fname = sys.argv[1]
 print "sucessfull passing of " + fname
-df = fpre_process(fname)
-print df.shape
+df, y, X = fpre_process(fname)
+print df.shape, X['Cabin'].unique()

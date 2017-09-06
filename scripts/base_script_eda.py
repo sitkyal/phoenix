@@ -1,16 +1,15 @@
 
-# Instructions 
+# Instructions
 # Run the followng on CLI or Node
-# python base_script_eda.py train.csv 
-
+# python base_script_eda.py train.csv
 
 
 # global import
 import pandas as pd
 import sys
 
-
 # load cvs and run status
+
 
 def fload_csv(fname):
     import pandas as pd
@@ -18,14 +17,15 @@ def fload_csv(fname):
     print fname + " successfully loaded"
     return df, df.shape
 
-
 # preview data
+# Mongo/text Stream
 
 
 def fpreview_data(df):
     return df.head(n=5)
 
 # identification of columns
+# Mongo/text Stream
 
 
 def fcolumns(df):
@@ -35,6 +35,7 @@ def fcolumns(df):
     return cols, num_cols, cat_cols
 
 # statistics
+# Mongo/text Stream
 
 
 def fstats(df, cols, num_cols):
@@ -50,10 +51,22 @@ def fstats(df, cols, num_cols):
 
 # Run the main script
 
-#fname = sys.argv[1]
-#df, size = fload_csv(fname)
-#preview = fpreview_data(df)
-#cols, num_cols, cat_cols = fcolumns(df)
-#num_cols_stats, cat_cols_stats, leaf_count = fstats(df, cols, num_cols)
-#print fname, preview, cols, num_cols, cat_cols, num_cols_stats, cat_cols_stats
-#sys.stdout.flush()
+fname = sys.argv[1]
+df, size = fload_csv(fname)
+preview = fpreview_data(df)
+cols, num_cols, cat_cols = fcolumns(df)
+num_cols_stats, cat_cols_stats, leaf_count = fstats(df, cols, num_cols)
+# print fname, preview, cols, num_cols, cat_cols, num_cols_stats, cat_cols_stats
+
+base_eda_out = {
+    "File Name": fname,
+    #"Preview Data": preview,
+    "Columns": cols,
+    "Numerical Columns": num_cols,
+    "Categorical Columns": cat_cols,
+    "Num Column Stats": num_cols_stats,
+    "Cat Column Stats": cat_cols_stats
+}
+
+print base_eda_out
+sys.stdout.flush()

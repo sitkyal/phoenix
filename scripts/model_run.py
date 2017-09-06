@@ -10,13 +10,13 @@ import pandas as pd
 import sys
 
 
-def fmodel_run(imodel):
+# def fmodel_run(imodel):
 
-    imodel = list(pd.Series(imodel).values)
+#imodel = list(pd.Series(imodel).values)
 
-    for i in imodel:
-        imodel, score = i()
-        return imodel, score
+# for i in imodel:
+#    imodel, score = i()
+#    return imodel, score
 
 
 def decision_tree(k, eval_metric=None):
