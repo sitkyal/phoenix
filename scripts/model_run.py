@@ -19,12 +19,9 @@ import sys
 #    return imodel, score
 
 
-def decision_tree(k, eval_metric=None):
+def decision_tree(X, y, k, eval_metric=None):
     from sklearn import tree
     from sklearn.model_selection import cross_val_score
-
-    from base import base_found
-    X, X_test, y = base_found()
 
     # Model
 
@@ -35,13 +32,10 @@ def decision_tree(k, eval_metric=None):
     return score
 
 
-def knn(k, eval_metric=None):
+def knn(X, y, k, eval_metric=None):
     #from sklearn.neighbors import KNeighborsClassifier
     from sklearn.svm import SVC
     from sklearn.model_selection import cross_val_score
-
-    from base import base_found
-    X, X_test, y = base_found()
 
     cm1 = SVC()
     score1 = round(
@@ -49,13 +43,16 @@ def knn(k, eval_metric=None):
     print 'KNN Score: {}'.format(score1)
     return score1
 
+
 # for testing
+fname = sys.argv[1]
+k = 20
 
+from pre_process import fpre_process
+X, y = fpre_process(fname)
+decision_tree(X, y, k)
+knn(X, y, k)
 
-decision_tree(20)
-knn(20)
-
-#imodel = sys.argv[1:]
 
 #imodel = fmodel_run(imodel)
 # print imodel, type(imodel)

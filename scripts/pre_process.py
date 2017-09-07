@@ -19,11 +19,14 @@ def fpre_process(fname):
     # 7. Impute num column values with mean - Done
     # 8. Hot Encode - Done
     # 9. Standardize - TBD
-    # 10. Return X and y - To be Done
+    # 10. Return X and y - Done
+    # 11. Include label in the pre-process
 
     # olabel, ofeatures = flabel_features(ilabel, ifeatures) # uncomment when testing is done
 
     # for testing - Replace this code with extracting from label_features.py
+    #olabel, ofeatures = flabel_features(ilabel, ifeatures)
+
     olabel = ['Survived']
     ofeatures = ['Pclass', 'Sex', 'Age', 'Embarked', 'Cabin']
 
@@ -31,21 +34,28 @@ def fpre_process(fname):
 
     df, size = fload_csv(fname)
 
+    # Store in temp dataframe
+
+    tdf = df[ofeatures]
+    ldf = df[olabel]
+
     # calculate the numerical and cat columns
 
-    cols = list(df[ofeatures].columns)
-    num_cols = list(df[ofeatures]._get_numeric_data().columns)
+    cols = list(tdf.columns)
+    num_cols = list(tdf._get_numeric_data().columns)
     cat_cols = list(set(cols) - set(num_cols))
 
     # Determine columns with Null values and Replace NAs
 
-    null_num_cols = df[num_cols].columns[df[num_cols].isnull().any()].tolist()
-    null_cat_cols = df[cat_cols].columns[df[cat_cols].isnull().any()].tolist()
+    null_num_cols = tdf[num_cols].columns[tdf[num_cols].isnull().any()
+                                          ].tolist()
+    null_cat_cols = tdf[cat_cols].columns[tdf[cat_cols].isnull().any()
+                                          ].tolist()
 
     # For numerical columns
 
     for col in null_num_cols:
-        df[col].fillna(df[col].mean(), inplace=True)
+        tdf[col].fillna(tdf[col].mean(), inplace=True)
 
     # For categorical columns impute and hot encode
 
@@ -53,21 +63,27 @@ def fpre_process(fname):
 
         # impute missing values
 
-        df[col].fillna(df[col].value_counts().max(), inplace=True)
+        tdf[col].fillna(tdf[col].value_counts().max(), inplace=True)
 
     for col in cat_cols:
         # Hot Encode
 
-        df = pd.concat([df, pd.get_dummies(df[col])], axis=1)
+        tdf = pd.concat([tdf, pd.get_dummies(tdf[col])], axis=1)
+
+    tdf.drop(cat_cols, axis=1, inplace=True)
 
     # Extract X and y
-    y = df[olabel] #.as_matrix().astype(np.float)
-    X = df[ofeatures]# .as_matrix().astype(np.float)
+    y = ldf.as_matrix().astype(np.float)
+    X = tdf.as_matrix().astype(np.float)
+    
+    # reshape for cross validation - sheez!
+    c, r = y.shape
+    y = y.reshape(c,)
 
-    return df, y, X
+    return X, y
 
 
-fname = sys.argv[1]
-print "sucessfull passing of " + fname
-df, y, X = fpre_process(fname)
-print df.shape, X['Cabin'].unique()
+#fname = sys.argv[1]
+#X, y = fpre_process(fname)
+# print X, y
+# sys.stdout.flush()
