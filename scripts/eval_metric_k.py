@@ -18,6 +18,6 @@ ik = sys.argv[2:]
 #label = pd.Series(['Survived'])
 #features = pd.Series(['Pclass', 'Sex', 'Age'])
 
-ometric, ok = metric_k(imetric, ik)
+ometric, ok = fmetric_k(imetric, ik)
 print ometric, ok
 sys.stdout.flush()

@@ -48,7 +48,6 @@ def fstats(df, cols, num_cols):
         set(cols) - set(num_cols)) if df[c].unique().size < 10]
     return num_cols_stats, cat_cols_stats, leaf_count
 
-
 # Run the main script
 
 fname = sys.argv[1]

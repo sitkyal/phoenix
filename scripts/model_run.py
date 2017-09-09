@@ -8,52 +8,30 @@
 
 import pandas as pd
 import sys
-
-
-# def fmodel_run(imodel):
-
-#imodel = list(pd.Series(imodel).values)
-
-# for i in imodel:
-#    imodel, score = i()
-#    return imodel, score
-
-
-def decision_tree(X, y, k, eval_metric=None):
-    from sklearn import tree
-    from sklearn.model_selection import cross_val_score
-
-    # Model
-
-    cm = tree.DecisionTreeClassifier()
-    score = round((cross_val_score(cm, X, y, cv=k,
-                                   scoring=eval_metric, n_jobs=-1).max()), 2)
-    print 'Decision Tree Classifier Score: {}'.format(score)
-    return score
-
-
-def knn(X, y, k, eval_metric=None):
-    #from sklearn.neighbors import KNeighborsClassifier
-    from sklearn.svm import SVC
-    from sklearn.model_selection import cross_val_score
-
-    cm1 = SVC()
-    score1 = round(
-        (cross_val_score(cm1, X, y, cv=k, scoring=eval_metric, n_jobs=-1).max()), 2)
-    print 'KNN Score: {}'.format(score1)
-    return score1
+import models
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 # for testing
 fname = sys.argv[1]
-k = 20
+#imodel = ['decision_tree', 'knn', 'Random_Forest_Classifier',
+#          'AdaBoost_Classifier', 'GradientBoosting_Classifier', 'Logistic_Regression', 'svm', 'XGBoost_Classifier']
+
+imodel = falgo()
+
+converter = {"decision_tree": models.decision_tree, "knn": models.knn,
+             "Random_Forest_Classifier": models.Random_Forest_Classifier,
+             "AdaBoost_Classifier": models.AdaBoost_Classifier,
+             "GradientBoosting_Classifier": models.GradientBoosting_Classifier,
+             "Logistic_Regression": models.Logistic_Regression, "svm": models.svm, "XGBoost_Classifier": models.XGBoost_Classifier}
+k = 10
 
 from pre_process import fpre_process
 X, y = fpre_process(fname)
-decision_tree(X, y, k)
-knn(X, y, k)
 
+for i in imodel:
 
-#imodel = fmodel_run(imodel)
-# print imodel, type(imodel)
-# sys.stdout.flush()
+    # convert into function name
+    algo_func = converter[i]
+    algo_func(X, y, k)

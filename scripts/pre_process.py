@@ -36,8 +36,8 @@ def fpre_process(fname):
 
     # Store in temp dataframe
 
-    tdf = df[ofeatures]
-    ldf = df[olabel]
+    tdf = df[ofeatures].copy()
+    ldf = df[olabel].copy()
 
     # calculate the numerical and cat columns
 
