@@ -22,13 +22,14 @@ def fpre_process(fname):
     # 10. Return X and y - Done
     # 11. Include label in the pre-process
 
-    # olabel, ofeatures = flabel_features(ilabel, ifeatures) # uncomment when testing is done
+    # Get the labels and features selected
 
-    # for testing - Replace this code with extracting from label_features.py
-    #olabel, ofeatures = flabel_features(ilabel, ifeatures)
+    from label_features import flabel_features
+    olabel, ofeatures = flabel_features() # uncomment when testing is done
 
-    olabel = ['Survived']
-    ofeatures = ['Pclass', 'Sex', 'Age', 'Embarked', 'Cabin']
+    #print olabel
+    #olabel = ['Survived']
+    #ofeatures = ['Pclass', 'Sex', 'Age', 'Embarked', 'Cabin']
 
     from load import fload_csv
 
@@ -75,7 +76,7 @@ def fpre_process(fname):
     # Extract X and y
     y = ldf.as_matrix().astype(np.float)
     X = tdf.as_matrix().astype(np.float)
-    
+
     # reshape for cross validation - sheez!
     c, r = y.shape
     y = y.reshape(c,)
