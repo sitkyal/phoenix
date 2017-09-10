@@ -11,18 +11,28 @@ import sys
 import models
 import warnings
 from tqdm import tqdm
+import json
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+with open('config.json') as input_file:
+    data = json.load(input_file)
+
+fname = str(data['filename'])
 
 # for testing
-fname = sys.argv[1]
+#fname = sys.argv[1]
 
 # Get X, y
+
+print "Preprocessing Started....."
 
 from pre_process import fpre_process
 X, y = fpre_process(fname)
 
+print "Preprocessing Complete...."
+
 # Get the Models to run
+
 
 from algo import falgo
 imodel = falgo()
@@ -46,9 +56,12 @@ converter = {"decision_tree": models.decision_tree, "knn": models.knn,
 # imodel = ['decision_tree', 'knn', 'Random_Forest_Classifier',
 #          'AdaBoost_Classifier', 'GradientBoosting_Classifier', 'Logistic_Regression', 'svm', 'XGBoost_Classifier']
 
+print "Modeling Started...."
 
 for i in tqdm(imodel):
 
     # convert into function name
     algo_func = converter[i]
     algo_func(X, y, k)
+
+print "Modeling Complete"

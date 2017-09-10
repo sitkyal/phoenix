@@ -7,6 +7,7 @@
 # global import
 import pandas as pd
 import sys
+import json
 
 # load cvs and run status
 
@@ -50,12 +51,17 @@ def fstats(df, cols, num_cols):
 
 # Run the main script
 
-fname = sys.argv[1]
+with open('config.json') as input_file:
+        data = json.load(input_file)
+
+fname = str(data['filename'])
+
+#fname = sys.argv[1]
 df, size = fload_csv(fname)
 preview = fpreview_data(df)
 cols, num_cols, cat_cols = fcolumns(df)
 num_cols_stats, cat_cols_stats, leaf_count = fstats(df, cols, num_cols)
-# print fname, preview, cols, num_cols, cat_cols, num_cols_stats, cat_cols_stats
+
 
 base_eda_out = {
     "File Name": fname,

@@ -2,14 +2,19 @@
 
 import pandas as pd
 import sys
+import json
 
 
 def flabel_features(ilabel=None, ifeatures=None):
 
     # ilabel and ifeatures will be passed in from Node
 
-    ilabel = ['Survived'] # Remove once testing is done
-    ifeatures = ['PassengerId','Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Embarked', 'Cabin', 'Ticket', 'Fare'] # Remove once testing is done
+    with open('config.json') as input_file:
+        data = json.load(input_file)
+
+    ilabel = str(data['label'])
+    ifeatures = list(data['features'])
+
     olabel = pd.Series(ilabel).values
     ofeatures = pd.Series(ifeatures).values
     return olabel, ofeatures

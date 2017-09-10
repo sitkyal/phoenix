@@ -2,24 +2,25 @@
 
 import pandas as pd
 import sys
+import json
 
 
 def fmetric_k(imetric=None, ik=None):
 
     # imetric and ik will be passed in from Node
 
-    #ometric = 'accuracy' # Remove once testing is done
-    ok = 25 # Remove once testing is done
+    with open('config.json') as input_file:
+        data = json.load(input_file)
+
+
+    imetric = str(data['evalmetric'])
+
     ometric = pd.Series(imetric).values
-    #ok = pd.Series(ok).values
+    ok = int(data['k'])
     return ometric, ok
 
 #imetric = sys.argv[1]
 #ik = sys.argv[2:]
-
-# for testing
-#label = pd.Series(['Survived'])
-#features = pd.Series(['Pclass', 'Sex', 'Age'])
 
 #ometric, ok = fmetric_k(imetric, ik)
 #print ometric, ok

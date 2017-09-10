@@ -2,15 +2,18 @@
 
 import pandas as pd
 import sys
+import json
 
 
 
 def falgo(ialgo_list=None):
 
-    # Delete the following list when passing from Node
+    # Algorithm selection will come from Node
 
-    ialgo_list=['decision_tree', 'knn', 'Random_Forest_Classifier',
-          'AdaBoost_Classifier', 'GradientBoosting_Classifier', 'Logistic_Regression', 'svm', 'XGBoost_Classifier']
+    with open('config.json') as input_file:
+        data = json.load(input_file)
+
+    ialgo_list = list(data['algo'])
 
     oalgo_list = pd.Series(ialgo_list).values
     return oalgo_list

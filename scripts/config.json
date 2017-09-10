@@ -1,0 +1,23 @@
+{
+    "filename": "train.csv",
+    "evalmetric": "accuracy",
+    "k": 20,
+    "label": "Survived",
+    "features":["PassengerId",
+        "Pclass",
+        "Sex",
+        "Age",
+        "SibSp",
+        "Parch",
+        "Embarked",
+        "Cabin",
+        "Ticket",
+        "Fare"],
+    "algo": ["decision_tree",
+        "knn",
+        "Random_Forest_Classifier",
+          "AdaBoost_Classifier",
+          "Logistic_Regression",
+          "svm",
+          "XGBoost_Classifier"]
+}
