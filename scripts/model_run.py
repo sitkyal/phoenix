@@ -53,15 +53,18 @@ converter = {"decision_tree": models.decision_tree, "knn": models.knn,
              "Logistic_Regression": models.Logistic_Regression, "svm": models.svm, "XGBoost_Classifier": models.XGBoost_Classifier}
 
 
-# imodel = ['decision_tree', 'knn', 'Random_Forest_Classifier',
-#          'AdaBoost_Classifier', 'GradientBoosting_Classifier', 'Logistic_Regression', 'svm', 'XGBoost_Classifier']
-
 print "Modeling Started...."
 
 for i in tqdm(imodel):
+    from models1 import model_builder
+    model_name, score, ypred = model_builder(i, X, y, k)
+
+    # calculate evaluation components
+
 
     # convert into function name
-    algo_func = converter[i]
-    algo_func(X, y, k)
+    #algo_func = converter[i]
+    #algo_func(X, y, k)
+
 
 print "Modeling Complete"
