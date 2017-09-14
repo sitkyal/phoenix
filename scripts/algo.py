@@ -19,7 +19,7 @@ def falgo(ialgo_list=None):
     return oalgo_list
 
 
-# Uncomment the following when passing from Node
+# Uncomment the following for Node
 
 # ialgo_list = sys.argv[1:]
 # oalgo_list = falgo(ialgo_list)

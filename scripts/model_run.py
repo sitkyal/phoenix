@@ -13,14 +13,14 @@ import warnings
 from tqdm import tqdm
 import json
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+from evaluation import rocc, conf_mat
+
+# wrap model_run in a function in order to send data to evaluation
 
 with open('config.json') as input_file:
     data = json.load(input_file)
 
 fname = str(data['filename'])
-
-# for testing
-#fname = sys.argv[1]
 
 # Get X, y
 
@@ -43,28 +43,40 @@ imodel = falgo()
 from eval_metric_k import fmetric_k
 ometric, k = fmetric_k()
 
-
-# Convert to functions
-
-converter = {"decision_tree": models.decision_tree, "knn": models.knn,
-             "Random_Forest_Classifier": models.Random_Forest_Classifier,
-             "AdaBoost_Classifier": models.AdaBoost_Classifier,
-             "GradientBoosting_Classifier": models.GradientBoosting_Classifier,
-             "Logistic_Regression": models.Logistic_Regression, "svm": models.svm, "XGBoost_Classifier": models.XGBoost_Classifier}
-
-
+cmatrix_json = {}
+roc_json = {}
 print "Modeling Started...."
 
+
 for i in tqdm(imodel):
-    from models1 import model_builder
-    model_name, score, ypred = model_builder(i, X, y, k)
+    from model_builder import model_builder
+    model_name, score, ypred, y = model_builder(i, X, y, k)
 
     # calculate evaluation components
+
+    # Confusion Matrix
+
+    cmatrix = conf_mat(y, ypred)
+    cmatrix_json.update({model_name: cmatrix.tolist()})
+
+
+    # ROC Curve and AUC
+
+    fpr, tpr = rocc(y, ypred)
+    roc_param = [fpr, tpr]
+    roc_json.update({model_name:{"fpr": fpr.tolist(), "tpr": tpr.tolist()}})
+
+    # Feature Importance
 
 
     # convert into function name
     #algo_func = converter[i]
     #algo_func(X, y, k)
 
+with open('conf.json', 'w') as outfile:
+        json.dump(cmatrix_json, outfile)
+
+with open('roc.json', 'w') as outfile:
+        json.dump(roc_json, outfile)
 
 print "Modeling Complete"
