@@ -14,5 +14,5 @@
         "Fare"],
     "algo": ["decision_tree",
         "Random_Forest_Classifier",
-        "knn"]
+        "knn", "Logistic_Regression"]
 }

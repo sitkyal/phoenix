@@ -76,10 +76,9 @@ def fpre_process(fname):
 
     for progress_bar in tqdm(range(2)):
         if progress_bar == 0:
-            print "Loading Data....."
             tdf, ldf = load_process()
         if progress_bar == 1:
-            print "Imputing missing data and hot encoding features..."
+            print "Imputing missing data and one hot encoding features..."
             tdf, ldf  = null_process(tdf, ldf)
 
     # Extract X and y

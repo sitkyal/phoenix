@@ -8,7 +8,7 @@ import sklearn.neighbors
 import sklearn.linear_model
 import sklearn.svm
 import xgboost
-from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectFromModel, RFECV
 
 converter = {"decision_tree": sklearn.tree.DecisionTreeClassifier,
              "Random_Forest_Classifier": sklearn.ensemble.RandomForestClassifier,
@@ -26,10 +26,10 @@ def model_builder(mname, X, y, k, eval_metric=None):
     #score = round(
      #   (cross_val_score(cm, X, y, cv=k, scoring=eval_metric, n_jobs=-1).max()), 3)
     ypred = cross_val_predict(cm, X,y, cv=k, n_jobs=-1)
+    y_score = cross_val_predict(cm, X, y, cv=k, n_jobs=-1, method='predict_proba')
     score = accuracy_score(y, ypred)
-
-    # calcuate feature importance
 
     model_name = mname
     print mname + ' {}'.format(score)
-    return model_name, score, ypred, y
+    return model_name, score, y, ypred, y_score
+

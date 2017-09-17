@@ -1,0 +1,5 @@
+Model,TP,TN,FP,FN
+decision_tree,480,246,69,96
+Random_Forest_Classifier,505,234,44,108
+knn,286,135,263,207
+Logistic_Regression,485,241,64,101

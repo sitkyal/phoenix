@@ -12,6 +12,7 @@ import models
 import warnings
 from tqdm import tqdm
 import json
+import numpy as np
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 from evaluation import rocc, conf_mat
 
@@ -29,7 +30,7 @@ print "Preprocessing Started....."
 from pre_process import fpre_process
 X, y = fpre_process(fname)
 
-print "Preprocessing Complete...."
+print "Preprocessing Complete"
 
 # Get the Models to run
 
@@ -44,39 +45,76 @@ from eval_metric_k import fmetric_k
 ometric, k = fmetric_k()
 
 cmatrix_json = {}
+cm_eval_metrics_json = {}
 roc_json = {}
+roc_list = []
+cmatrix_list = []
+roc_array = np.zeros(shape=(3, 3))
+cm_eval_metrics = []
+
 print "Modeling Started...."
 
 
 for i in tqdm(imodel):
     from model_builder import model_builder
-    model_name, score, ypred, y = model_builder(i, X, y, k)
+    model_name, score, y, ypred, y_score = model_builder(i, X, y, k)
 
-    # calculate evaluation components
+    # Get evaluation components
 
     # Confusion Matrix
 
-    cmatrix = conf_mat(y, ypred)
+    cmatrix, TP, TN, FP, FN, Specificity, Sensitivity, Accuracy, Error_Rate, Precision, FPR, f1score, neglogloss, mcc = conf_mat(
+        y, ypred)
+    cmatrix_list.append([model_name, TP, TN, FP, FN])
     cmatrix_json.update({model_name: cmatrix.tolist()})
-
+    cm_eval_metrics.append([model_name, Specificity, Sensitivity,
+                            Accuracy, Error_Rate, Precision, FPR, f1score, neglogloss, mcc])
+    cm_eval_metrics_json.update({model_name: cm_eval_metrics})
 
     # ROC Curve and AUC
+    fpr, tpr = rocc(y, y_score)
 
-    fpr, tpr = rocc(y, ypred)
-    roc_param = [fpr, tpr]
-    roc_json.update({model_name:{"fpr": fpr.tolist(), "tpr": tpr.tolist()}})
+    # generate CSV
+    m_list = []
+    roc_list = []
+    m_list = [model_name for i in fpr]
+    roc_list.append(m_list)
+    roc_list.append(fpr)
+    roc_list.append(tpr)
+    roc_list_t = np.array(roc_list).T
+    roc_array = np.append(roc_array, roc_list_t, axis=0)
 
-    # Feature Importance
-
+    # generate JSON
+    roc_json.update({model_name: {"fpr": fpr.tolist(), "tpr": tpr.tolist()}})
 
     # convert into function name
     #algo_func = converter[i]
     #algo_func(X, y, k)
 
-with open('conf.json', 'w') as outfile:
-        json.dump(cmatrix_json, outfile)
+# Output files
+# CSV
 
-with open('roc.json', 'w') as outfile:
-        json.dump(roc_json, outfile)
+cmatrix_csv = pd.DataFrame(data=cmatrix_list, columns=[
+                           'Model', 'TP', 'TN', 'FP', 'FN'])
+cmatrix_csv.to_csv('output/cmatrix.csv', index=False)
+cm_eval_metrics_csv = pd.DataFrame(data=cm_eval_metrics, columns=[
+                                   'Model', 'Specificity', 'Sensitivity', 'Accuracy', 'Error Rate', 'Precision', 'FPR', 'f1 Score', 'NegLogLoss', 'MCC'])
+cm_eval_metrics_csv.to_csv('output/cm_eval_metrics.csv', index=False)
+
+roc_array = np.delete(roc_array, (0, 1, 2), axis=0)
+roc_csv = pd.DataFrame(data=roc_array, columns=['Model', 'FPR', 'TPR'])
+roc_csv.to_csv('output/roc.csv', index=False)
+
+# JSON
+
+with open('output/conf.json', 'w') as outfile:
+    json.dump(cmatrix_json, outfile)
+
+with open('output/cm_eval_metrics.json', 'w') as outfile:
+    json.dump(cm_eval_metrics_json, outfile)
+
+with open('output/roc.json', 'w') as outfile:
+    json.dump(roc_json, outfile)
+
 
 print "Modeling Complete"
