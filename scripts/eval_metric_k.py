@@ -1,5 +1,8 @@
 # Store user selected columns (label and features)
 
+# Error Handling - General
+# User does not send any selection - default selection (Max 1 for eval and default k)
+
 import pandas as pd
 import sys
 import json

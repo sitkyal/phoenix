@@ -1,7 +1,10 @@
 
-# Instructions
-# Run the followng on CLI or Node
-# python base_script_eda.py train.csv
+# Error Handling
+# I/O Error, Bad File Name, Empty File,
+# Wrong Extension, Bad File, Big File, Load Timeout
+# Bad Column Name
+# No data returned
+# Cannot write file to db / file system
 
 
 # global import
@@ -44,9 +47,14 @@ def fstats(df, cols, num_cols):
     num_cols_stats = df.describe()
     cat_cols_stats = df.describe(include=['O'])
 
-    # stats for categorical column leafs - leafs < 10
-    leaf_count = [df[c].value_counts() for c in list(
-        set(cols) - set(num_cols)) if df[c].unique().size < 10]
+    # stats for categorical column leafs - leafs < 20
+    leaf_count = {}
+    for c in list(set(cols) - set(num_cols)):
+        if df[c].unique().size < 20:
+            leaf_count.update({c:df[c].value_counts().to_dict()})
+
+#    leaf_count = [df[c].value_counts() for c in list(
+#        set(cols) - set(num_cols)) if df[c].unique().size < 20]
     return num_cols_stats, cat_cols_stats, leaf_count
 
 # Run the main script
@@ -63,15 +71,46 @@ cols, num_cols, cat_cols = fcolumns(df)
 num_cols_stats, cat_cols_stats, leaf_count = fstats(df, cols, num_cols)
 
 
-base_eda_out = {
-    "File Name": fname,
-    #"Preview Data": preview,
-    "Columns": cols,
-    "Numerical Columns": num_cols,
-    "Categorical Columns": cat_cols,
-    "Num Column Stats": num_cols_stats,
-    "Cat Column Stats": cat_cols_stats
-}
+# prep data for output
+columns_json = {}
+columns_csv = []
 
-print base_eda_out
+for col in num_cols:
+    columns_json.update({col:"N"})
+    columns_csv.append([col, "N"])
+for col in cat_cols:
+    columns_json.update({col : "C"})
+    columns_csv.append([col, "C"])
+
+
+# CSV output
+
+columns_csv = pd.DataFrame(data=columns_csv, columns=[
+                           'Column', 'Type'])
+columns_csv.to_csv('output/' + fname + '_columns.csv', index=False)
+
+preview.to_csv('output/' + fname + '_preview.csv', index=False)
+
+num_cols_stats.to_csv('output/' + fname + '_numcolstats.csv', index=False)
+cat_cols_stats.to_csv('output/' + fname + '_catcolstats.csv', index=False)
+
+pd.DataFrame.from_dict(leaf_count).to_csv('output/' + fname + '_leafcount.csv', index=False)
+
+# JSON output
+
+with open('output/' + fname + '_cols.json', 'w') as outfile:
+    json.dump(columns_json, outfile)
+
+with open('output/' + fname + '_preview.json', 'w') as outfile:
+    json.dump(preview.to_dict(orient = 'index'), outfile)
+
+with open('output/' + fname + '_numcolstats.json', 'w') as outfile:
+    json.dump(num_cols_stats.to_dict(orient = 'dict'), outfile)
+
+with open('output/' + fname + '_catcolstats.json', 'w') as outfile:
+    json.dump(cat_cols_stats.to_dict(orient = 'dict'), outfile)
+
+with open('output/' + fname + '_leafcount.json', 'w') as outfile:
+    json.dump(leaf_count, outfile)
+
 sys.stdout.flush()

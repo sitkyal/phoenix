@@ -14,5 +14,10 @@
         "Fare"],
     "algo": ["decision_tree",
         "Random_Forest_Classifier",
-        "knn", "Logistic_Regression"]
+        "knn",
+        "Logistic_Regression",
+        "AdaBoost_Classifier",
+        "GradientBoosting_Classifier",
+        "svm",
+        "XGBoost_Classifier"]
 }

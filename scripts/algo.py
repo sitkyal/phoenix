@@ -1,5 +1,9 @@
 # Store user selected algorithms
 
+# Error Handling - General
+# User does not send any selection - default selection (Minimum 1)
+
+
 import pandas as pd
 import sys
 import json

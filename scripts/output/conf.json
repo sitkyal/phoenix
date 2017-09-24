@@ -1,1 +1,1 @@
-{"decision_tree": [[480, 69], [96, 246]], "Random_Forest_Classifier": [[505, 44], [108, 234]], "knn": [[286, 263], [207, 135]], "Logistic_Regression": [[485, 64], [101, 241]]}
+{"decision_tree": [[478, 71], [92, 250]], "Random_Forest_Classifier": [[504, 45], [109, 233]], "svm": [[267, 282], [199, 143]], "knn": [[286, 263], [207, 135]], "Logistic_Regression": [[485, 64], [101, 241]], "XGBoost_Classifier": [[490, 59], [108, 234]], "AdaBoost_Classifier": [[479, 70], [100, 242]], "GradientBoosting_Classifier": [[497, 52], [108, 234]]}

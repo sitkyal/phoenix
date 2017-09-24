@@ -2,6 +2,10 @@
 
 # module to connect and load data
 
+# Error Handling
+# I/O Error, Bad File Name, Empty File,
+# Wrong Extension, Bad File, Big File, Load Timeout
+
 import pandas as pd
 
 def fload_csv(fname):

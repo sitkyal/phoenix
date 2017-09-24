@@ -1,5 +1,7 @@
 # module for evaluation
 
+# Division by Zero, No data, attribute not passed
+
 from sklearn import metrics
 from sklearn import feature_selection
 
@@ -10,7 +12,15 @@ def rocc(y, y_score):
     fpr = dict()
     tpr = dict()
     fpr, tpr, thresholds = metrics.roc_curve(y, y_score[:, 1])
-    return fpr, tpr
+    auc_score = metrics.roc_auc_score(y, y_score[:,1])
+    return fpr, tpr, auc_score
+
+# calculate Precision Recall Curve
+
+def prc(y, y_score):
+    precision, recall, thresholds = metrics.precision_recall_curve(y, y_score[:,1])
+    return precision, recall
+
 
 # calcuate confusion matrix
 

@@ -1,0 +1,13 @@
+Column,Type
+PassengerId,N
+Survived,N
+Pclass,N
+Age,N
+SibSp,N
+Parch,N
+Fare,N
+Ticket,C
+Sex,C
+Name,C
+Cabin,C
+Embarked,C
