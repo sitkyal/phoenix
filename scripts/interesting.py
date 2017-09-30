@@ -17,8 +17,8 @@ def main():
     # Parse the given arguments
     args = parser.parse_args()
 
-    # Get the function based on the command line argument and 
-    # call it with the other two command line arguments as 
+    # Get the function based on the command line argument and
+    # call it with the other two command line arguments as
     # function arguments
     eval(args.function)(args.first_arg)
 
@@ -30,3 +30,23 @@ def load_arg(first_arg):
 
 if __name__ == '__main__':
 	main()
+
+# Timeout
+
+from threading import Timer
+import thread, time, sys
+
+def timeout():
+    thread.interrupt_main()
+
+def main():
+    print 'it keeps going and going ',
+    while 1:
+        print 'and going '
+    time.sleep(1)
+
+try:
+    Timer(5, timeout).start()
+    main()
+except:
+    print "whoops"

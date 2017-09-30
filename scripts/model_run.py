@@ -10,32 +10,36 @@ import pandas as pd
 import sys
 #import models
 import warnings
-from tqdm import tqdm
 import json
 import numpy as np
-
+import logging
+import logging.config
 from evaluation import rocc, conf_mat, prc
+from tqdm import tqdm
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+
+# set up logging
+
+logging.config.fileConfig('mwlog_conf', disable_existing_loggers=False)
+logger = logging.getLogger("mwApp")
+
 # wrap model_run in a function in order to send data to evaluation
+logger.info('START')
 
 with open('config.json') as input_file:
     data = json.load(input_file)
 
 fname = str(data['filename'])
 
-# Get X, y
 
-print "Preprocessing Started....."
+# Get X, y
 
 from pre_process import fpre_process
 X, y = fpre_process(fname)
 
-print "Preprocessing Complete"
-
 # Get the Models to run
-
 
 from algo import falgo
 imodel = falgo()
@@ -59,7 +63,7 @@ roc_array = np.zeros(shape=(3, 3))
 prc_array = np.zeros(shape=(3, 3))
 cm_eval_metrics = []
 
-print "Modeling Started...."
+logger.info("Modeling Started....")
 
 
 for i in tqdm(imodel):
@@ -101,10 +105,10 @@ for i in tqdm(imodel):
 
     # prepare data for output formats
 
-    m_list = []
+    m_list1 = []
     prc_list = []
-    m_list = [model_name for i in precision]
-    prc_list.append(m_list)
+    m_list1 = [model_name for i in precision]
+    prc_list.append(m_list1)
     prc_list.append(precision)
     prc_list.append(precision)
     prc_list_t = np.array(prc_list).T
@@ -112,10 +116,9 @@ for i in tqdm(imodel):
     prc_json.update({model_name: {"precision": precision.tolist(),
                     "recall": recall.tolist()}})
 
-    # convert into function name
-    # algo_func = converter[i]
-    # algo_func(X, y, k)
+logger.info("Modeling Complete")
 
+logger.info('Outputting to CSV')
 # Output files
 # CSV
 
@@ -138,6 +141,7 @@ prc_csv = pd.DataFrame(data=prc_array, columns=['Model', 'Precision', 'Recall'])
 prc_csv.to_csv('output/prc.csv', index=False)
 
 # JSON
+logger.info('Outputting to JSON')
 
 with open('output/conf.json', 'w') as outfile:
     json.dump(cmatrix_json, outfile)
@@ -151,5 +155,5 @@ with open('output/roc.json', 'w') as outfile:
 with open('output/prc.json', 'w') as outfile:
     json.dump(prc_json, outfile)
 
-
-print "Modeling Complete"
+logger.info('Model Publication Complete')
+logger.info('END')

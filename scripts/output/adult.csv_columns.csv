@@ -1,0 +1,16 @@
+Column,Type
+age,N
+fnlwgt,N
+education-num,N
+capital-gain,N
+capital-loss,N
+hours-per-week,N
+income,N
+workclass,C
+AF,C
+country,C
+sex,C
+race,C
+education,C
+marital-status,C
+occupation,C

@@ -1,0 +1,5 @@
+,workclass,education,marital-status,occupation,AF,race,sex,country
+count,32561,32561,32561,32561,32561,32561,32561,32561
+unique,9,16,7,15,6,5,2,42
+top, Private, HS-grad, Married-civ-spouse, Prof-specialty, Husband, White, Male, United-States
+freq,22696,10501,14976,4140,13193,27816,21790,29170

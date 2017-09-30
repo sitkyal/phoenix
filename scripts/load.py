@@ -7,14 +7,26 @@
 # Wrong Extension, Bad File, Big File, Load Timeout
 
 import pandas as pd
+import logging
 
 def fload_csv(fname):
-    print "Loading Data into frames....."
-    df = pd.read_csv(fname)
-    print " Data successfully loaded"
-    return df, df.shape
+    try:
+        print "Loading Data into frames....."
+        df = pd.read_csv(fname)
+        print " Data successfully loaded"
+        return df, df.shape
+    except EnvironmentError as e:
+        logging.error(e)
+#        error_log.write('An error occurred : %s\n' % e)
+        return 1
+
+
 
 def fload_xl(fname):
-    pd.read_excel(fname, sheetname=1)
-    print "Data successfully loaded"
-    return df, df.shape
+    try:
+        pd.read_excel(fname, sheetname=1)
+        print "Data successfully loaded"
+        return df, df.shape
+    except EnvironmentError as e:
+        logging.error(e)
+        return 1

@@ -10,6 +10,9 @@ import sklearn.neighbors
 import sklearn.linear_model
 import sklearn.svm
 import xgboost
+import logging
+import sys
+
 from sklearn.feature_selection import SelectFromModel
 
 converter = {"decision_tree": sklearn.tree.DecisionTreeClassifier,
@@ -21,21 +24,29 @@ converter = {"decision_tree": sklearn.tree.DecisionTreeClassifier,
              "svm": sklearn.svm.SVC,
              "XGBoost_Classifier": xgboost.XGBClassifier}
 
-
 def model_builder(mname, X, y, k, eval_metric=None):
-    model_name = converter[mname]
-    if mname == 'svm':
-        cm = model_name(probability=True)
-        ypred = cross_val_predict(cm, X,y, cv=k, n_jobs=-1)
-        y_score = cross_val_predict(cm, X, y, cv=k, n_jobs=-1, method='predict_proba')
-    else:
-        cm = model_name()
-        ypred = cross_val_predict(cm, X,y, cv=k, n_jobs=-1)
-        y_score = cross_val_predict(cm, X, y, cv=k, n_jobs=-1, method='predict_proba')
-    #score = round(
-     #   (cross_val_score(cm, X, y, cv=k, scoring=eval_metric, n_jobs=-1).max()), 3)
-    score = accuracy_score(y, ypred)
 
-    model_name = mname
-    print mname + ' {}'.format(score)
-    return model_name, score, y, ypred, y_score
+    mbuilder_logger = logging.getLogger('lmbuilder')
+
+    try:
+        mbuilder_logger.info('Start cross validation, fitting and scoring for %s' %mname)
+        model_name = converter[mname]
+        if mname == 'svm':
+            cm = model_name(probability=True)
+            ypred = cross_val_predict(cm, X,y, cv=k, n_jobs=-1)
+            y_score = cross_val_predict(cm, X, y, cv=k, n_jobs=-1, method='predict_proba')
+        else:
+            cm = model_name()
+            ypred = cross_val_predict(cm, X,y, cv=k, n_jobs=-1)
+            y_score = cross_val_predict(cm, X, y, cv=k, n_jobs=-1, method='predict_proba')
+        #score = round(
+         #   (cross_val_score(cm, X, y, cv=k, scoring=eval_metric, n_jobs=-1).max()), 3)
+        score = accuracy_score(y, ypred)
+        model_name = mname
+        print mname + ' {}'.format(score)
+        mbuilder_logger.info('Complete cross validation, fitting and scoring for %s' %mname)
+        return model_name, score, y, ypred, y_score
+    except Exception as e:
+        mbuilder_logger.exception(e)
+        sys.exit(1)
+        return 1

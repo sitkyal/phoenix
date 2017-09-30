@@ -1,9 +1,8 @@
 Model,TP,TN,FP,FN
-decision_tree,478,250,71,92
-Random_Forest_Classifier,504,233,45,109
-knn,286,135,263,207
-Logistic_Regression,485,241,64,101
-AdaBoost_Classifier,479,242,70,100
-GradientBoosting_Classifier,497,234,52,108
-svm,267,143,282,199
-XGBoost_Classifier,490,234,59,108
+decision_tree,21667,4921,3053,2920
+Random_Forest_Classifier,23112,4538,1608,3303
+knn,22682,2587,2038,5254
+AdaBoost_Classifier,23202,4804,1518,3037
+GradientBoosting_Classifier,23442,4726,1278,3115
+Logistic_Regression,23908,2054,812,5787
+XGBoost_Classifier,23480,4645,1240,3196

@@ -1,5 +1,5 @@
-Name,Sex,Ticket,Cabin,Embarked
-891,891,891,204,889
-891,2,681,147,3
-"Graham, Mr. George Edward",male,CA. 2343,C23 C25 C27,S
-1,577,7,4,644
+,Name,Sex,Ticket,Cabin,Embarked
+count,891,891,891,204,889
+unique,891,2,681,147,3
+top,"Graham, Mr. George Edward",male,CA. 2343,C23 C25 C27,S
+freq,1,577,7,4,644
