@@ -33,7 +33,6 @@ with open('config.json') as input_file:
 
 fname = str(data['filename'])
 
-
 # Get X, y
 
 from pre_process import fpre_process
@@ -50,7 +49,7 @@ imodel = falgo()
 from eval_metric_k import fmetric_k
 ometric, k = fmetric_k()
 
-# initialize variables
+# initialize variables for Classification
 
 cmatrix_json = {}
 cm_eval_metrics_json = {}
@@ -62,6 +61,8 @@ cmatrix_list = []
 roc_array = np.zeros(shape=(3, 3))
 prc_array = np.zeros(shape=(3, 3))
 cm_eval_metrics = []
+
+# initiate variables for Regression
 
 logger.info("Modeling Started....")
 

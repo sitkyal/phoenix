@@ -14,6 +14,7 @@ def flabel_features(ilabel=None, ifeatures=None):
     label_feature_logger = logging.getLogger('llabelfeature')
 
     # ilabel and ifeatures will be passed in from Node
+
     try:
         label_feature_logger.info('Started features and label extraction')
 

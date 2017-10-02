@@ -1,33 +1,35 @@
-2017-09-29 17:56:19,784 - mwApp - INFO - START
-2017-09-29 17:56:19,788 - lpreproc - INFO - Preprocessing started
-2017-09-29 17:56:19,790 - llabelfeature - INFO - Started features and label extraction
-2017-09-29 17:56:19,791 - llabelfeature - INFO - Completed Features and label extraction
-2017-09-29 17:56:19,791 - lpreproc - INFO - Data load started
-2017-09-29 17:56:19,960 - lpreproc - INFO - Data load ended
-2017-09-29 17:56:19,960 - lpreproc - INFO - Imputing null values
-2017-09-29 17:56:19,996 - lpreproc - INFO - Hot Encoding categorical features
-2017-09-29 17:56:20,235 - lpreproc - INFO - Preprocessing ended
-2017-09-29 17:56:20,237 - lalgo - INFO - Started model selection
-2017-09-29 17:56:20,238 - lalgo - INFO - Completed model selection
-2017-09-29 17:56:20,240 - lemk - INFO - Started evaluation metric and k
-2017-09-29 17:56:20,241 - lemk - INFO - Completed evaluation metric and k
-2017-09-29 17:56:20,241 - mwApp - INFO - Modeling Started....
-2017-09-29 17:56:23,199 - lmbuilder - INFO - Start cross validation, fitting and scoring for decision_tree
-2017-09-29 17:56:39,853 - lmbuilder - INFO - Complete cross validation, fitting and scoring for decision_tree
-2017-09-29 17:56:39,925 - lmbuilder - INFO - Start cross validation, fitting and scoring for Random_Forest_Classifier
-2017-09-29 17:56:58,509 - lmbuilder - INFO - Complete cross validation, fitting and scoring for Random_Forest_Classifier
-2017-09-29 17:56:58,600 - lmbuilder - INFO - Start cross validation, fitting and scoring for knn
-2017-09-29 17:57:33,031 - lmbuilder - INFO - Complete cross validation, fitting and scoring for knn
-2017-09-29 17:57:33,120 - lmbuilder - INFO - Start cross validation, fitting and scoring for AdaBoost_Classifier
-2017-09-29 17:58:53,600 - lmbuilder - INFO - Complete cross validation, fitting and scoring for AdaBoost_Classifier
-2017-09-29 17:58:53,725 - lmbuilder - INFO - Start cross validation, fitting and scoring for GradientBoosting_Classifier
-2017-09-29 18:06:03,239 - lmbuilder - INFO - Complete cross validation, fitting and scoring for GradientBoosting_Classifier
-2017-09-29 18:06:03,443 - lmbuilder - INFO - Start cross validation, fitting and scoring for Logistic_Regression
-2017-09-29 18:06:11,740 - lmbuilder - INFO - Complete cross validation, fitting and scoring for Logistic_Regression
-2017-09-29 18:06:11,942 - lmbuilder - INFO - Start cross validation, fitting and scoring for XGBoost_Classifier
-2017-09-29 18:13:05,223 - lmbuilder - INFO - Complete cross validation, fitting and scoring for XGBoost_Classifier
-2017-09-29 18:13:05,494 - mwApp - INFO - Modeling Complete
-2017-09-29 18:13:05,495 - mwApp - INFO - Outputting to CSV
-2017-09-29 18:13:06,251 - mwApp - INFO - Outputting to JSON
-2017-09-29 18:13:07,698 - mwApp - INFO - Model Publication Complete
-2017-09-29 18:13:07,698 - mwApp - INFO - END
+2017-10-01 12:31:36,017 - mwApp - INFO - START
+2017-10-01 12:31:36,020 - lpreproc - INFO - Preprocessing started
+2017-10-01 12:31:36,022 - llabelfeature - INFO - Started features and label extraction
+2017-10-01 12:31:36,023 - llabelfeature - INFO - Completed Features and label extraction
+2017-10-01 12:31:36,023 - lpreproc - INFO - Data load started
+2017-10-01 12:31:36,064 - lpreproc - INFO - Data load ended
+2017-10-01 12:31:36,064 - lpreproc - INFO - Imputing null values
+2017-10-01 12:31:36,068 - lpreproc - INFO - Encoding categorical features
+2017-10-01 12:31:36,101 - lpreproc - INFO - Preprocessing ended
+2017-10-01 12:31:36,104 - lalgo - INFO - Started model selection
+2017-10-01 12:31:36,105 - lalgo - INFO - Completed model selection
+2017-10-01 12:31:36,107 - lemk - INFO - Started evaluation metric and k
+2017-10-01 12:31:36,107 - lemk - INFO - Completed evaluation metric and k
+2017-10-01 12:31:36,108 - mwApp - INFO - Modeling Started....
+2017-10-01 12:31:37,957 - lmbuilder - INFO - Start cross validation, fitting and scoring for decision_tree
+2017-10-01 12:31:40,120 - lmbuilder - INFO - Complete cross validation, fitting and scoring for decision_tree
+2017-10-01 12:31:40,129 - lmbuilder - INFO - Start cross validation, fitting and scoring for Random_Forest_Classifier
+2017-10-01 12:31:42,449 - lmbuilder - INFO - Complete cross validation, fitting and scoring for Random_Forest_Classifier
+2017-10-01 12:31:42,456 - lmbuilder - INFO - Start cross validation, fitting and scoring for knn
+2017-10-01 12:31:44,373 - lmbuilder - INFO - Complete cross validation, fitting and scoring for knn
+2017-10-01 12:31:44,382 - lmbuilder - INFO - Start cross validation, fitting and scoring for AdaBoost_Classifier
+2017-10-01 12:31:55,508 - lmbuilder - INFO - Complete cross validation, fitting and scoring for AdaBoost_Classifier
+2017-10-01 12:31:55,520 - lmbuilder - INFO - Start cross validation, fitting and scoring for GradientBoosting_Classifier
+2017-10-01 12:32:38,533 - lmbuilder - INFO - Complete cross validation, fitting and scoring for GradientBoosting_Classifier
+2017-10-01 12:32:38,542 - lmbuilder - INFO - Start cross validation, fitting and scoring for Logistic_Regression
+2017-10-01 12:32:40,634 - lmbuilder - INFO - Complete cross validation, fitting and scoring for Logistic_Regression
+2017-10-01 12:32:40,643 - lmbuilder - INFO - Start cross validation, fitting and scoring for svm
+2017-10-01 12:33:29,600 - lmbuilder - INFO - Complete cross validation, fitting and scoring for svm
+2017-10-01 12:33:29,610 - lmbuilder - INFO - Start cross validation, fitting and scoring for XGBoost_Classifier
+2017-10-01 12:34:00,525 - lmbuilder - INFO - Complete cross validation, fitting and scoring for XGBoost_Classifier
+2017-10-01 12:34:00,535 - mwApp - INFO - Modeling Complete
+2017-10-01 12:34:00,536 - mwApp - INFO - Outputting to CSV
+2017-10-01 12:34:00,583 - mwApp - INFO - Outputting to JSON
+2017-10-01 12:34:00,640 - mwApp - INFO - Model Publication Complete
+2017-10-01 12:34:00,640 - mwApp - INFO - END

@@ -1,0 +1,1 @@
+{"algo": ["decision_tree", "Random_Forest_Classifier", "knn", "AdaBoost_Classifier", "GradientBoosting_Classifier", "Logistic_Regression", "svm", "XGBoost_Classifier"]}
